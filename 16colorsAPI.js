@@ -21,7 +21,7 @@ function checkYearListings(){
 theYearList = checkYearListings();
 
 //BUG ELABORATION
-//displayYears shows 653 items in the yearList Array should be more like 25 (years 1990-2015) and keys don't mach up with data
+//displayYears shows 653 items in the yearList Array should be more like 25 (1990-2015) and keys don't mach up with data
 //in other words the following function is motherfunked
 
 function displayYears(){
@@ -60,7 +60,7 @@ function getListInPack(pack){
 
 		for(i=0;i<ansiFiles.length;i++){
 			ansiFile = ansiFiles[i];
-			ansiFileExt = ansiFile.filename.substring(ansiFile.filename.length - 3,ansiFile.filename.length);
+			ansiFileExt = ansiFile.filename.substring(ansiFile.filename.length - 3,ansiFile.filename.length).toUpperCase();
 				if(ansiFileExt == "ASC" || ansiFileExt == "TXT" ||ansiFileExt == "ANS") {
 					filteredFiles.push(ansiFile);
 				}
@@ -94,7 +94,7 @@ function askForAnsiFromPack(pack){
 }
 
 console.clear();
-console.print(grabAnsi(askForAnsiFromPack("01ninja")));
+console.print(grabAnsi(askForAnsiFromPack("blocktronics_wtf4")));
 //displayPackList("01ninja");
 //4. http://sixteencolors.net/pack/01ninja/FZ-BLUE.ANS/download -- use file location parameter to get the download URL (dont use 'api' prefix)
 
