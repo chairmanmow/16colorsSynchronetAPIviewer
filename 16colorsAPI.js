@@ -25,7 +25,7 @@ catch(err){
 		selectAYear();
 	}
 }
-// --> browsePacksInYear() --> findPagesInAYear() --> displayPackPage() --> selectAPack() --> getListFromPack() -->  askForAnsiFromPack() --> grabAnsi() --> print();
+// selectAYear()--> browsePacksInYear() --> findPagesInAYear() --> displayPackPage() --> selectAPack() --> getListFromPack() -->  askForAnsiFromPack() --> grabAnsi() --> print();
 
 
 function showGlobalPrompt() {
