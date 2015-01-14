@@ -6,6 +6,9 @@ var apiRoot = "http://api.sixteencolors.net/v0";
 var itemsPerPage = 30;
 
 var theYear;
+var thePacks;
+
+var currentPack;
 var currentPackList = [];
 // 1. //http://api.sixteencolors.net/v0/year  -- get list of years
 // Sample Data // {"packs":690,"year":1997}
@@ -15,11 +18,9 @@ function checkYearListings(){
 	yearEndpoint = apiRoot + "/year";
 	yearResponse = request.Get(yearEndpoint);
 	yearList = request.body;
-	console.putmsg("If the following number is more than 24 or 25 there's a bug-> " + yearList.length + "\r\n It represents this data length of \r\n\1r\1h" + JSON.stringify(yearList));  //length returns 653 for some reason BUG
-	console.pause();
 	return yearList;
 }
-theYearList = checkYearListings();
+//theYearList = checkYearListings();
 
 //BUG ELABORATION
 //displayYears shows 653 items in the yearList Array should be more like 25 (1990-2015) and keys don't mach up with data
@@ -34,16 +35,18 @@ function displayYears(){
 
 // 2. //http://api.sixteencolors.net/v0/year/1997 -- grab a year (this one has over 600 paks![pagination])
 // sample return data: need name // [{"name":"01ninja","filename":"01ninja.zip","groups":[],"year":1997,"month":null},
-// 
+ 
 
 function browsePacksInYear(aYear){
-	//displayYears();
+	theYear = aYear;
 	request = new HTTPRequest();
-	aYearEndpoint = apiRoot + "/year/" + aYear;
+	aYearEndpoint = apiRoot + "/year/" + aYear + "?p=1&rows=30";
 	aYearResponse = request.Get(aYearEndpoint);
 	packsByYearList = request.body;
-	//console.putmsg("\1gJSON packs by year \1h " + JSON.stringify(packsByYearList));
-	//console.putmsg("\1h\1w\r\n\r\n" + request.response_headers["Link"] + "\r\n\r\n");
+	
+	//the next 12 or so lines basically are a way of parsing the header to figure out how many pages of packs there are.
+	//console.putmsg(JSON.stringify(request.response_headers));
+	console.pause();
 	var pageLinkInfo = "";
 		for(i=0;i<request.response_headers.length;i++){
 			var paramStr = request.response_headers[i];
@@ -52,18 +55,60 @@ function browsePacksInYear(aYear){
 			break;
 			}
 		}
-		console.putmsg("\1h\1i\1y" + pageLinkInfo);
-		matchLoc1 = pageLinkInfo.indexOf('&rows=30>; rel="last"');
-		console.putmsg("\1h\1w\r\n Match Location 1 : " + matchLoc1);
-		numberOfPages = pageLinkInfo.substring(matchLoc1-1,matchLoc1);
-		console.putmsg("\r\n\1c Number of Pages : \1h " + numberOfPages);
 
-	/* for(key in request.response_headers){
-			console.putmsg("\1m" + key + " \1h" + request.response_headers[key] +"\r\n");
-	} */
+	pageLinkInfo = pageLinkInfo.replace("\\","");
+	matchLoc1 = pageLinkInfo.indexOf('>; rel="last"');
+	numberOfPages = pageLinkInfo.substring(matchLoc1-30,matchLoc1);
+	matchLoc2 = numberOfPages.indexOf("page=");
+	numberOfPages = numberOfPages.substring(matchLoc2+5,matchLoc2 + 6);
+	console.putmsg("\r\n\1b Number of Pages : \1h " + numberOfPages);
+	numberOfPages = parseInt(numberOfPages);
+	//now you know the number of pages so you can get the names of packs without going over the pages.
+	console.putmsg("\r\n\1b Number of Pages : \1h " + numberOfPages);
+
+	request2 = new HTTPRequest();
+	completeYearEndpoint = apiRoot + "/year/" + theYear + "?p=1&rows=" + 30 * numberOfPages;
+	console.putmsg("\r\n" + completeYearEndpoint + "\r\n")
+	entireYearResponse = request2.Get(completeYearEndpoint);
+	thePacks = JSON.parse(request.body);
+	console.putmsg("\1h\1yTotal Packs Received \1c " + thePacks.length);
+	//console.putmsg(JSON.stringify(thePacks));
+	for(i=0;i<thePacks.length;i++){
+		var aPack = thePacks[i];
+		console.putmsg("\1c" + i + "\1nName \1h" + aPack.name + "\1nyr:\1h " + aPack.year + "\r\n");
+	}
+
+	console.pause();
+	selectAPack();
+	
+
 }
 
-browsePacksInYear(1993);
+function selectAYear(){
+		console.putmsg("\r\n\1hSelect a Year\r\n");
+		choice = -1;
+		while(choice < 1990 || choice > 2015){
+			console.putmsg("Enter a year from 1990 to 2015" );
+			choice = console.getnum();
+		}
+		theYear = choice;
+}
+
+function selectAPack(){
+		console.putmsg("\r\nSelect a Pack Num");
+		choice = -1;
+		while(choice < 0 || choice > thePacks.length){
+			console.putmsg("Enter a numer from 0 to " + thePacks.length);
+			choice = console.getnum();
+		}
+		currentPack = thePacks[choice].name;
+		console.clear();
+		console.print(grabAnsi(askForAnsiFromPack(currentPack)));
+	}
+
+selectAYear();
+browsePacksInYear(theYear);
+
 
 // PART THREE CHECK FILES IN A PACK GIVEN A STRING WITH THE PACK NAME AND RETRIEVE THE FILE AND DISPLAY IT
 
@@ -119,7 +164,7 @@ function askForAnsiFromPack(pack){
 }
 
 console.clear();
-console.print(grabAnsi(askForAnsiFromPack("blocktronics_wtf4")));
+//console.print(grabAnsi(askForAnsiFromPack("blocktronics_wtf4")));
 
 
 //4. http://sixteencolors.net/pack/01ninja/FZ-BLUE.ANS/download -- use file location parameter to get the download URL (dont use 'api' prefix)
