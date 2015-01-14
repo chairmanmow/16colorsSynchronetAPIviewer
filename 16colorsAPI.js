@@ -1,6 +1,7 @@
 load("sbbsdefs.js");
 load("http.js");
-
+console.clear();
+console.attributes = BG_BLACK|WHITE;
 var siteRoot = "http://sixteencolors.net";
 var apiRoot = "http://api.sixteencolors.net/v0";
 var itemsPerPage = 30;
@@ -222,7 +223,7 @@ function askForAnsiFromPack(pack){
 	thePackList = getListFromPack(pack);
 	packListLength = thePackList.length - 1;
 	if(packListLength < 0){
-		onsole.putmsg("\1r\r\nNo valid files found in Pack, blame me or blame sixteen colors.\r\n\1c Returning to pack Selection");
+		console.putmsg("\1r\r\nNo valid files found in Pack, blame me or blame sixteen colors.\r\n\1c Returning to pack Selection");
 		selectAYear();
 		return;
 	}
