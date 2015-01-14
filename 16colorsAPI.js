@@ -42,9 +42,25 @@ function browsePacksInYear(aYear){
 	aYearEndpoint = apiRoot + "/year/" + aYear;
 	aYearResponse = request.Get(aYearEndpoint);
 	packsByYearList = request.body;
-	for(key in request.response_headers){
-		console.putmsg("\1m" + key + " \1h" + request.response_headers[key] +"\r\n");
-	}
+	//console.putmsg("\1gJSON packs by year \1h " + JSON.stringify(packsByYearList));
+	//console.putmsg("\1h\1w\r\n\r\n" + request.response_headers["Link"] + "\r\n\r\n");
+	var pageLinkInfo = "";
+		for(i=0;i<request.response_headers.length;i++){
+			var paramStr = request.response_headers[i];
+			if(paramStr.substring(0,5) == "Link:"){
+				pageLinkInfo = paramStr;
+			break;
+			}
+		}
+		console.putmsg("\1h\1i\1y" + pageLinkInfo);
+		matchLoc1 = pageLinkInfo.indexOf('&rows=30>; rel="last"');
+		console.putmsg("\1h\1w\r\n Match Location 1 : " + matchLoc1);
+		numberOfPages = pageLinkInfo.substring(matchLoc1-1,matchLoc1);
+		console.putmsg("\r\n\1c Number of Pages : \1h " + numberOfPages);
+
+	/* for(key in request.response_headers){
+			console.putmsg("\1m" + key + " \1h" + request.response_headers[key] +"\r\n");
+	} */
 }
 
 browsePacksInYear(1993);
