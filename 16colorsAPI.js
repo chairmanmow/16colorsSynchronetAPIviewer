@@ -92,59 +92,69 @@ function displayPackPage(){
 		}
 }
 function pageNavPrompt(){
-	pageNavOptions = [{hotkey:"S", description:"Select Pack and List Files"},{hotkey:"N", description:"Next Page of Packs"},{hotkey:"P", description:"Previous Page of Packs" + currentPack},{hotkey:"Y", description:"Select a Year"},{hotkey:"X", description:"Exit Program"}]
+	pageNavOptions = [{hotkey:"S", description:"Select Pack and List Files"},{hotkey:"N", description:"Next Page of Packs"},{hotkey:"P", description:"Previous Page of Packs"},{hotkey:"J", description:"Jump to Page Number"},{hotkey:"Y", description:"Select a Year"},{hotkey:"X", description:"Exit Program"}]
 	showGlobalPrompt();
 
 	console.putmsg("\1m Enter a choice ")
 	for(i=0;i<pageNavOptions.length;i++){
 		console.putmsg("\1g" + pageNavOptions[i].hotkey +"\1h\1y, " )
 	}
-	console.putmsg("\1h, ?\1i\1r:\1n\r\nPage \1h\1y" + currentPage + "\1n of \1y" + numberOfPages);
+	console.putmsg("\1h ?\1i\1r:\1n\r\nPage \1h\1y" + currentPage + "\1n of \1y" + numberOfPages);
 	var pagePromptSel = console.getkey();
 	switch(pagePromptSel.toUpperCase()){
 		case "S" :
-		selectAPack();
-		return;
+			selectAPack();
+			return;
 		case "N" :
-		if(currentPage + 1 <= numberOfPages){
-			currentPage++;
-			checkPageListing();
-			displayPackPage();
-			return;
-		} else {
-				console.putmsg("\1rLast Page Reached!\r\n");
-				break;
-		}
+			if(currentPage + 1 <= numberOfPages){
+				currentPage++;
+				checkPageListing();
+				displayPackPage();
+				return;
+			} else {
+					console.putmsg("\1rLast Page Reached!\r\n");
+					break;
+			}
 		case "P" :
-		if(currentPage - 1 > 0){
-			currentPage--;
+			if(currentPage - 1 > 0){
+				currentPage--;
+				checkPageListing();
+				displayPackPage();
+				return;
+			} else {
+				console.putmsg("\1rYou are on the first page!\r\n")
+					break;
+			}
+		case "J" :
+			choice2 = -1;
+			while(choice2 < 1 || choice2 > numberOfPages){
+				console.putmsg("\1h\1rSelect a Page number \1y--> ");
+				choice2 = console.getnum();
+			}
+			currentPage = parseInt(choice2);
 			checkPageListing();
 			displayPackPage();
-			return;
-		} else {
-			console.putmsg("\1rYou are on the first page!\r\n")
-				break;
-		}
-		case "Y" :
-		selectAYear();
 		return;
-		case "?" :
-		console.putmsg("\r\n");
-		for(i=0;i<pageNavOptions.length;i++){
-			console.putmsg(pageNavOptions[i].hotkey + " --- " + pageNavOptions[i].description + "\r\n" )
-		}
-		break;
+		case "Y" :
+			selectAYear();
+			return;
+			case "?" :
+			console.putmsg("\r\n");
+			for(i=0;i<pageNavOptions.length;i++){
+				console.putmsg(pageNavOptions[i].hotkey + " --- " + pageNavOptions[i].description + "\r\n" )
+			}
+			break;
 		case "X" :
-		throw("quit");
-		default :
-		console.putmsg("Enter a Valid Selection\r\n");
-		break;
+			throw("quit");
+			default :
+			console.putmsg("Enter a Valid Selection\r\n");
+			break;
 	}
 
 function checkPageListing(){
 		request2 = new HTTPRequest();
 		completeYearEndpoint = apiRoot + "/year/" + theYear + "?page=" + currentPage + "&rows=30";
-		console.putmsg("\r\n" + completeYearEndpoint + "\r\n")
+		
 		entireYearResponse = request2.Get(completeYearEndpoint);
 
 		thePacks = JSON.parse(request2.body);
