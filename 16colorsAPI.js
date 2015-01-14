@@ -222,8 +222,8 @@ function askForAnsiFromPack(pack){
 	thePackList = getListFromPack(pack);
 	packListLength = thePackList.length - 1;
 	if(packListLength < 0){
-		console.putmsg("\1r\r\nNo files found in Pack.  Returning to pack Selection");
-		browsePacksInYear(theYear);
+		onsole.putmsg("\1r\r\nNo valid files found in Pack, blame me or blame sixteen colors.\r\n\1c Returning to pack Selection");
+		selectAYear();
 		return;
 	}
 	displayPackList(pack);  //for convenience  interface TBD
