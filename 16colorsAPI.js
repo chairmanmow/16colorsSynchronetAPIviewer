@@ -36,11 +36,18 @@ function displayYears(){
 // sample return data: need name // [{"name":"01ninja","filename":"01ninja.zip","groups":[],"year":1997,"month":null},
 // 
 
-function browsePacksInYear(){
+function browsePacksInYear(aYear){
 	//displayYears();
-
+	request = new HTTPRequest();
+	aYearEndpoint = apiRoot + "/year/" + aYear;
+	aYearResponse = request.Get(aYearEndpoint);
+	packsByYearList = request.body;
+	for(key in request.response_headers){
+		console.putmsg("\1m" + key + " \1h" + request.response_headers[key] +"\r\n");
+	}
 }
 
+browsePacksInYear(1993);
 
 // PART THREE CHECK FILES IN A PACK GIVEN A STRING WITH THE PACK NAME AND RETRIEVE THE FILE AND DISPLAY IT
 
