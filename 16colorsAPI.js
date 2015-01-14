@@ -6,6 +6,7 @@ var apiRoot = "http://api.sixteencolors.net/v0";
 var itemsPerPage = 30;
 
 var theYear;
+var currentPackList = [];
 // 1. //http://api.sixteencolors.net/v0/year  -- get list of years
 // Sample Data // {"packs":690,"year":1997}
 
@@ -14,7 +15,7 @@ function checkYearListings(){
 	yearEndpoint = apiRoot + "/year";
 	yearResponse = request.Get(yearEndpoint);
 	yearList = request.body;
-	console.putmsg(yearList.length + "\r\n" + JSON.stringify(yearList));  //length returns 653 for some reason BUG
+	console.putmsg("If the following number is more than 24 or 25 there's a bug-> " + yearList.length + "\r\n It represents this data length of \r\n\1r\1h" + JSON.stringify(yearList));  //length returns 653 for some reason BUG
 	console.pause();
 	return yearList;
 }
@@ -65,12 +66,13 @@ function getListInPack(pack){
 					filteredFiles.push(ansiFile);
 				}
 		}
+	currentPackList = filteredFiles;
 	return filteredFiles;
 }
 
 function displayPackList(pack){
 	console.putmsg("\1h\1r" + pack + "\r\n");
-	packList = getListInPack(pack);
+	packList = currentPackList;
 		for(i=0;i<packList.length;i++){
 			var ansiFile = packList[i];
 			console.putmsg("\1y\1h" +i +"\1w  " + ansiFile.filename + "\r\n");
@@ -95,7 +97,8 @@ function askForAnsiFromPack(pack){
 
 console.clear();
 console.print(grabAnsi(askForAnsiFromPack("blocktronics_wtf4")));
-//displayPackList("01ninja");
+
+
 //4. http://sixteencolors.net/pack/01ninja/FZ-BLUE.ANS/download -- use file location parameter to get the download URL (dont use 'api' prefix)
 
 //console.print(grabAnsi("/pack/01ninja/FZ-BLUE.ANS/download"));;
