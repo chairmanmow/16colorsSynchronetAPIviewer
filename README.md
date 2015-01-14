@@ -7,27 +7,12 @@ This uses synchronets javascript functions combined with the 16colors.net api an
 
 To install on Synchronet, it is the same as any other Javascript Executable.  In SCFG, it would look something like, provided you've saved the 16colors.js in a directory /xtrn/16colors/:
 
-
-                  Sixteen Colors Archive                  │                   │▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒├──────────────────────────────────────────────────────────┤                   │▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Name                       Sixteen Colors Archive       │                   │▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Internal Code              16COLORS                     │                   │▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Start-up Directory         ../xtrn/16colors             │                   │▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Command Line               ?16colors.js                 │                   │▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Clean-up Command Line                                   │                   │▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Execution Cost             None                         │───────────────────┘▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Access Requirements                                     │▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Execution Requirements                                  │▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Multiple Concurrent Users  Yes                          │▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Intercept I/O              No                           │▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Native Executable          No                           │▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Use Shell to Execute       No                           │▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Modify User Data           No                           │▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒│ │Execute on Event           No                           │▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒▒▒▒┌[?][?]────────────│ │Pause After Execution      No                           │▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒▒▒▒│          Online P│ │BBS Drop File Type         None                         │▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒▒▒▒├──────────────────│ │Place Drop File In         Node Directory               │▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-▒▒▒▒│ │NewSchool BBS Ga│ │Time Options...              
+...SCFG... (everything else default values are fine)
+Name                       Sixteen Colors Archive       <--- any name is fine
+Internal Code              16COLORS                     <--- your own code
+Start-up Directory         ../xtrn/16colors             <--- where the file is
+Command Line               ?16colors.js                 <--- the filename preceded by a "?"
+Multiple Concurrent Users  Yes                          <--- multiple users can use at once
 
 Since this took a day to complete, I basically completed what I consider core functionality - getting lists of files and viewing them.  I'm sure you can think of some improvements, and I also encourage you to try getting your feet wet if you can muster the courage.  Obviously, you are welcome to fork or improve or modify this code. I may improve it some, but I consider this a good start and suitable of release.  
 
