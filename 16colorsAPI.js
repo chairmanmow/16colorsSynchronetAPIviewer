@@ -45,7 +45,7 @@ function browsePacksInYear(aYear){
 	packsByYearList = request.body;
 	
 	//the next 12 or so lines basically are a way of parsing the header to figure out how many pages of packs there are.
-	//console.putmsg(JSON.stringify(request.response_headers));
+	console.putmsg(JSON.stringify(request.response_headers));
 	console.pause();
 	var pageLinkInfo = "";
 		for(i=0;i<request.response_headers.length;i++){
@@ -60,7 +60,8 @@ function browsePacksInYear(aYear){
 	matchLoc1 = pageLinkInfo.indexOf('>; rel="last"');
 	numberOfPages = pageLinkInfo.substring(matchLoc1-30,matchLoc1);
 	matchLoc2 = numberOfPages.indexOf("page=");
-	numberOfPages = numberOfPages.substring(matchLoc2+5,matchLoc2 + 6);
+	matchLoc3 = numberOfPages.indexOf("&rows");
+	numberOfPages = numberOfPages.substring(matchLoc2+5,matchLoc3);
 	console.putmsg("\r\n\1b Number of Pages : \1h " + numberOfPages);
 	numberOfPages = parseInt(numberOfPages);
 	//now you know the number of pages so you can get the names of packs without going over the pages.
