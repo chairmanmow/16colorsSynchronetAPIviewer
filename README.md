@@ -1,7 +1,7 @@
 # 16colorsSynchronetAPIviewer
 This is a Door for Synchronet BBS software that displays ANSI files from the 16colors.net archive via their API.
 
-It will allow you to 1) List the packs in a year 2) Select a Pack and List the Files and 3) Select and View a File
+It will allow you to : <br>1) List the packs in a year <br>2) Select a Pack and List the Files and<br> 3) Select and View a File
 
 This uses synchronets javascript functions combined with the 16colors.net api and file structures, to display ansi from their massive library without having to download the archive.  I cobbled this together in under a day with some tips from the 16colors guys and their approval to tap into the API and grab files.  
 
