@@ -60,8 +60,8 @@ function browsePacksInYear(aYear){
 	matchLoc1 = pageLinkInfo.indexOf('>; rel="last"');
 	numberOfPages = pageLinkInfo.substring(matchLoc1-30,matchLoc1);
 	matchLoc2 = numberOfPages.indexOf("page=");
-	matchLoc3 = numberOfPages.indexOf("&rows");
-	numberOfPages = numberOfPages.substring(matchLoc2+5,matchLoc3);
+	matchLoc3 = numberOfPages.indexOf("&rows")
+	numberOfPages = numberOfPages.substring(matchLoc2+5,matchLoc2 + 7);
 	console.putmsg("\r\n\1b Number of Pages : \1h " + numberOfPages);
 	numberOfPages = parseInt(numberOfPages);
 	//now you know the number of pages so you can get the names of packs without going over the pages.
