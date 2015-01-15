@@ -252,7 +252,7 @@ function displayPackList(pack){
 	packList = currentPackList;
 		for(i=0;i<packList.length;i++){
 			var ansiFile = packList[i];
-			console.putmsg("\1y\1h " +i +" \1w  " + ansiFile.filename + "\r\n");
+			console.putmsg("\1y\1h " +i +" \1n\1m*\1c --\1m *\1w\1h " + ansiFile.filename + "\r\n");
 		}
 }
 
