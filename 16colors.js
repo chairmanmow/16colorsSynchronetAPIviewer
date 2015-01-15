@@ -1,5 +1,11 @@
+// The following comment on the next two lines shows the progression of how functions are executed in this program for the typical use case.
+
+// setModemSpeed() --> selectAYear()--> browsePacksInYear() --> findPagesInAYear() --> displayPackPage() 
+// --> selectAPack() --> getListFromPack() -->  askForAnsiFromPack() --> grabAnsi() --> showAnsi();
+
 load("sbbsdefs.js");
 load("http.js");
+
 console.clear();
 console.attributes = BG_BLACK|WHITE;
 var siteRoot = "http://sixteencolors.net";
@@ -11,7 +17,7 @@ var thePacks;
 var currentPack;
 var currentPackList = [];
 var currentAnsiFile;
-var waitTime = 20;
+var modemSpeed = 9;  //basically the length of chunks to be sent at a time 
 
 menuOptions = [{hotkey:"Y", description:"Select a Year"},{hotkey:"P", description:"Select Pack from Current Year " + theYear},{hotkey:"B", description:"Browse Ansi's in Pack " + currentPack},{hotkey:"X", description:"Exit Program"}]
 try{
@@ -31,17 +37,21 @@ catch(err){
 		selectAYear();
 	}
 }
-// selectAYear()--> browsePacksInYear() --> findPagesInAYear() --> displayPackPage() --> selectAPack() --> getListFromPack() -->  askForAnsiFromPack() --> grabAnsi() --> print();
+
 
 function setModemSpeed(){
-	console.putmsg("\1h\1cEnter Your Simulated Modem Speed.\r\n");
+	console.putmsg("\r\n\1h\1cEnter Your Simulated Modem Speed.\r\n");
 	choice = -1;
-	while(choice < 1 || choice > 128){
-		console.putmsg("\1wEnter a number from 1 to 128\1b--> ");
+	while(choice < 0 || choice > 128){
+		console.putmsg("\1h\1mCurrent Speed\1g=\1r "+ modemSpeed+ "000\1c bps\r\n\1h\1yEnter a number from \1w1 \1yto \1w128 \1y or Enter to keep current speed\1r--> ");
 		choice = console.getnum();
 	}
-	waitTime = parseInt(choice);
+	if(choice > 0){
+	modemSpeed = parseInt(choice);
+} 
+	console.putmsg("\r\n\1h\1wModem Speed set to \1r" + modemSpeed + "000 \1ybps\r\n")
 }
+
 
 function showGlobalPrompt() {
 	packPromptStr = "";
@@ -50,7 +60,7 @@ function showGlobalPrompt() {
 	} else {
 		packPromptStr = currentPack;
 	}
-	console.putmsg("\r\n\1h\1m16colors.net archive \1y**\1r" + waitTime + "000\1wbps\1y**: \1cYear: \1w" + theYear + " \1cPack: \1w" + packPromptStr + "\r\n");
+	console.putmsg("\r\n\1h\1m16colors.net archive \1y**\1r" + modemSpeed + "000\1wbps\1y**: \1cYear: \1w" + theYear + " \1cPack: \1w" + packPromptStr + "\r\n");
 }
 // 1. //http://api.sixteencolors.net/v0/year  -- get list of years
 // Sample Data // {"packs":690,"year":1997}
@@ -89,7 +99,7 @@ function browsePacksInYear(aYear){
 	currentPage = 1;
 	numberOfPages = findPagesInYear(aYear);
 
-	//console.putmsg("\1h\1yTotal Packs Received  approx\1c " + numberOfPages * 30 + "\r\n");
+	
 	displayPackPage();
 		while(currentPack == ""){
 		pageNavPrompt();
@@ -203,7 +213,8 @@ function findPagesInYear(aYear){
 	matchLoc3 = numberOfPages.indexOf("&rows")
 	numberOfPages = numberOfPages.substring(matchLoc2+5,matchLoc2 + 7);
 	numberOfPages = parseInt(numberOfPages);
-	console.putmsg("\r\n\1h\1w" + theYear + "\1m\1h Number of Pages : \1h " + numberOfPages + " \1yApproximate Packs : " + numberOfPages * 30 + " \r\n\r\n");
+	approxResults = numberOfPages * 30 - 29;
+	console.putmsg("\r\n\1h\1w" + theYear + "\1m\1h Number of Pages : \1h " + numberOfPages + " \1yApproximate Packs : " + approxResults + "-" + numberOfPages * 30 + " \r\n\r\n");
 	return numberOfPages;
 }
 
@@ -217,7 +228,6 @@ function findPagesInYear(aYear){
 function getListFromPack(pack){
 	var request = new HTTPRequest();
 	var packRoute = apiRoot + "/pack/" + pack;
-	//console.putmsg(packRoute +"\r\n")
 	var packResponse = request.Get(packRoute);
 	var rawPackList = request.body;
 	//let's parse the list to get the ansi and other stuff after we filter by extebsion
@@ -282,7 +292,6 @@ function askForAnsiFromPack(pack){
 				console.putmsg("\1cYour Ansi will display after you press a key. \r\n\1h\1r\1iPRESS \1yQ\1r TO ABORT ANSI DISPLAY\r\n");
 				console.pause;
 				console.clear();
-				//console.putmsg("@POFF@" + currentAnsiFile);
 				showAnsi();
 				console.pause();
 				console.clear();
@@ -298,7 +307,7 @@ function askForAnsiFromPack(pack){
 function showAnsi(){
 	currentAnsiFileChunk = currentAnsiFile.split("");
 	 while(currentAnsiFileChunk.length > 0) { 
-	 		console.write(currentAnsiFileChunk.splice(0,waitTime).join(""));
+	 		console.write(currentAnsiFileChunk.splice(0,modemSpeed).join(""));
                   if(console.inkey(K_UPPER, 1) == "Q"){ 
                   	break; }
                    }
