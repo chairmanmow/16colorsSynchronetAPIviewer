@@ -1,5 +1,6 @@
-// The following comment on the next two lines shows the progression of how functions are executed in this program for the typical use case.
+// The following comment on the next tthree lines shows the progression of how functions are executed in this program for the typical use case.
 
+// main() -->
 // setModemSpeed() --> selectAYear()--> browsePacksInYear() --> findPagesInAYear() --> displayPackPage() 
 // --> selectAPack() --> getListFromPack() -->  askForAnsiFromPack() --> grabAnsi() --> showAnsi();
 
@@ -20,30 +21,33 @@ var currentAnsiFile;
 var modemSpeed = 9;  //basically the length of chunks to be sent at a time 
 
 menuOptions = [{hotkey:"Y", description:"Select a Year"},{hotkey:"P", description:"Select Pack from Current Year " + theYear},{hotkey:"B", description:"Browse Ansi's in Pack " + currentPack},{hotkey:"X", description:"Exit Program"}]
+
+main();
+function main(){
 try{
 	setModemSpeed();
 	selectAYear();  
-} 
-catch(err){
-	if(err == "quit"){
-		console.clear();
-		console.putmsg("\1cLooks like you've chosen to quit\r\n\1nThanks for using the 16 colors ANSI viewer.\r\n\1hCheck out my other projects at github/chairmanmow\r\n\1yOr visit my BBS: \1wfutureland.grudgemirror.com\r\n");
-		console.pause();
-	} else {
-		console.putmsg("\1h\1r\1iCrash detected, restarting");
-		console.putmsg("\r\n\1y" + err);
-		console.pause();
-		console.clear();
-		selectAYear();
+	} 
+	catch(err){
+		if(err == "quit"){
+			console.clear();
+			console.putmsg("\1cLooks like you've chosen to quit\r\n\1nThanks for using the 16 colors ANSI viewer.\r\n\1hCheck out my other projects at github/chairmanmow\r\n\1yOr visit my BBS: \1wfutureland.grudgemirror.com\r\n");
+			console.pause();
+		} else {
+			console.putmsg("\1h\1r\1iCrash detected, restarting");
+			console.putmsg("\r\n\1y" + err);
+			console.pause();
+			console.clear();
+			main();
+		}
 	}
 }
 
-
 function setModemSpeed(){
-	console.putmsg("\r\n\1h\1cEnter Your Simulated Modem Speed.\r\n");
+	console.putmsg("\r\n\1h\1cEnter Your Simulated Modem Speed.\r\n\r\n");
 	choice = -1;
 	while(choice < 0 || choice > 128){
-		console.putmsg("\1h\1mCurrent Speed\1g=\1r "+ modemSpeed+ "000\1c bps\r\n\1h\1yEnter a number from \1w1 \1yto \1w128 \1y or Enter to keep current speed\1r--> ");
+		console.putmsg("\1h\1mCurrent Speed\1g=\1r "+ modemSpeed+ "000\1c bps\r\n\r\n\1h\1yEnter a number from \1w1 \1yto \1w128 \1y or Enter to keep current speed\1r--> ");
 		choice = console.getnum();
 	}
 	if(choice > 0){
@@ -91,8 +95,7 @@ function selectAPack(){
 		}
 		currentPack = thePacks[choice].name;
 		askForAnsiFromPack(currentPack);
-		console.clear();
-		console.print(grabAnsi(askForAnsiFromPack(currentPack)));
+
 	}
 
 function browsePacksInYear(aYear){
@@ -281,10 +284,10 @@ function askForAnsiFromPack(pack){
 		} 
 		else if(choice.toUpperCase() == "X"){
 			throw("quit");
-		} else if(parseInt(choice) != NaN) {
-			if(parseInt(choice) < 0 || parseInt(choice) > packListLength){
-				console.putmsg("\r\n\1\rEnter a valid number\r\n");
-			} else {
+		} else if(parseInt(choice) == NaN){
+			console.putmsg("\1h\r\nINVALID SELECTION\r\n");
+		} 
+		else if(parseInt(choice) != NaN && parseInt(choice) >= 0 && parseInt(choice) <= packListLength) {
 				ansiChoice = thePackList[parseInt(choice)];
 				ansiChoiceDownload = ansiChoice.file_location;
 				console.putmsg("\1m" + ansiChoiceDownload + "\r\n");
@@ -296,13 +299,12 @@ function askForAnsiFromPack(pack){
 				console.pause();
 				console.clear();
 				displayPackList(pack);
-				}
 		} else {
-			console.putmsg("\1r\r\nInvalid Selection.\r\n")
+			console.putmsg("\r\n\1rMake a valid selection\r\n");	
 		}
-	}	
-	return ansiChoiceDownload;	
-}
+	}
+}	
+
 
 function showAnsi(){
 	currentAnsiFileChunk = currentAnsiFile.split("");
