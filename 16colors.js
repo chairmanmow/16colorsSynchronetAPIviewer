@@ -11,10 +11,11 @@ var thePacks;
 var currentPack;
 var currentPackList = [];
 var currentAnsiFile;
-var waitTime = 1;
+var waitTime = 20;
 
 menuOptions = [{hotkey:"Y", description:"Select a Year"},{hotkey:"P", description:"Select Pack from Current Year " + theYear},{hotkey:"B", description:"Browse Ansi's in Pack " + currentPack},{hotkey:"X", description:"Exit Program"}]
 try{
+	setModemSpeed();
 	selectAYear();  
 } 
 catch(err){
@@ -32,6 +33,15 @@ catch(err){
 }
 // selectAYear()--> browsePacksInYear() --> findPagesInAYear() --> displayPackPage() --> selectAPack() --> getListFromPack() -->  askForAnsiFromPack() --> grabAnsi() --> print();
 
+function setModemSpeed(){
+	console.putmsg("\1h\1cEnter Your Simulated Modem Speed.\r\n");
+	choice = -1;
+	while(choice < 1 || choice > 128){
+		console.putmsg("\1wEnter a number from 1 to 128\1b--> ");
+		choice = console.getnum();
+	}
+	waitTime = parseInt(choice);
+}
 
 function showGlobalPrompt() {
 	packPromptStr = "";
@@ -96,7 +106,7 @@ function displayPackPage(){
 		}
 }
 function pageNavPrompt(){
-	pageNavOptions = [{hotkey:"S", description:"Select Pack and List Files"},{hotkey:"N", description:"Next Page of Packs"},{hotkey:"P", description:"Previous Page of Packs"},{hotkey:"J", description:"Jump to Page Number"},{hotkey:"Y", description:"Select a Year"},{hotkey:"X", description:"Exit Program"}]
+	pageNavOptions = [{hotkey:"S", description:"Select Pack and List Files"},{hotkey:"N", description:"Next Page of Packs"},{hotkey:"P", description:"Previous Page of Packs"},{hotkey:"J", description:"Jump to Page Number"},{hotkey:"Y", description:"Select a Year"},{hotkey:"M", description:"Set Modem Speed"},{hotkey:"X", description:"Exit Program"}]
 	showGlobalPrompt();
 
 	console.putmsg("\1m Enter a choice ")
@@ -147,6 +157,9 @@ function pageNavPrompt(){
 			for(i=0;i<pageNavOptions.length;i++){
 				console.putmsg(pageNavOptions[i].hotkey + " --- " + pageNavOptions[i].description + "\r\n" )
 			}
+			break;
+		case "M" :
+			setModemSpeed();
 			break;
 		case "X" :
 			throw("quit");
@@ -245,7 +258,7 @@ function askForAnsiFromPack(pack){
 	while(1){
 	choice = "";
 			showGlobalPrompt();
-			console.putmsg("Enter a number from 0 to " + packListLength + "\r\n or \1yC \1nto change Packs or\1y D\1n to Display files or\1y X\1n to exit");
+			console.putmsg("Enter a number from 0 to " + packListLength + "\r\n or \1yC \1n- change Packs or \1yM\1n - Modem speeds or\1y D\1n -Display files or\1y X\1n to exit");
 			choice = console.getstr();
 
 		if(choice.toUpperCase() == "C"){
@@ -253,6 +266,8 @@ function askForAnsiFromPack(pack){
 			return;
 		}else if(choice.toUpperCase() == "D"){
 			displayPackList(pack); 
+		} else if(choice.toUpperCase() == "M"){
+			setModemSpeed(); 
 		} 
 		else if(choice.toUpperCase() == "X"){
 			throw("quit");
@@ -283,8 +298,8 @@ function askForAnsiFromPack(pack){
 function showAnsi(){
 	currentAnsiFileChunk = currentAnsiFile.split("");
 	 while(currentAnsiFileChunk.length > 0) { 
-                  console.write(currentAnsiFileChunk.shift()); 
-                  if(console.inkey(K_UPPER, waitTime) == "Q"){ 
+	 		console.write(currentAnsiFileChunk.splice(0,waitTime).join(""));
+                  if(console.inkey(K_UPPER, 1) == "Q"){ 
                   	break; }
                    }
 
