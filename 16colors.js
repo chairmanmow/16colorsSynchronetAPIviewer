@@ -11,6 +11,8 @@ var thePacks;
 var currentPack;
 var currentPackList = [];
 var currentAnsiFile;
+var waitTime = 1;
+
 menuOptions = [{hotkey:"Y", description:"Select a Year"},{hotkey:"P", description:"Select Pack from Current Year " + theYear},{hotkey:"B", description:"Browse Ansi's in Pack " + currentPack},{hotkey:"X", description:"Exit Program"}]
 try{
 	selectAYear();  
@@ -18,9 +20,11 @@ try{
 catch(err){
 	if(err == "quit"){
 		console.clear();
-		console.putmsg("\1cLooks like you've chosen to quit\r\n\1nThanks for using the 16 colors ANSI viewer.\r\n\1hCheck out my other projects at github/chairmanmow\r\n")
+		console.putmsg("\1cLooks like you've chosen to quit\r\n\1nThanks for using the 16 colors ANSI viewer.\r\n\1hCheck out my other projects at github/chairmanmow\r\n\1yOr visit my BBS: \1wfutureland.grudgemirror.com\r\n");
+		console.pause();
 	} else {
 		console.putmsg("\1h\1r\1iCrash detected, restarting");
+		console.putmsg("\r\n\1y" + err);
 		console.pause();
 		console.clear();
 		selectAYear();
@@ -258,10 +262,13 @@ function askForAnsiFromPack(pack){
 			} else {
 				ansiChoice = thePackList[parseInt(choice)];
 				ansiChoiceDownload = ansiChoice.file_location;
-				console.putmsg(ansiChoiceDownload);
+				console.putmsg("\1m" + ansiChoiceDownload + "\r\n");
 				grabAnsi(ansiChoiceDownload);
+				console.putmsg("\1cYour Ansi will display after you press a key. \r\n\1h\1r\1iPRESS \1yQ\1r TO ABORT ANSI DISPLAY\r\n");
+				console.pause;
 				console.clear();
-				console.print(currentAnsiFile);
+				//console.putmsg("@POFF@" + currentAnsiFile);
+				showAnsi();
 				console.pause();
 				console.clear();
 				displayPackList(pack);
@@ -273,8 +280,17 @@ function askForAnsiFromPack(pack){
 	return ansiChoiceDownload;	
 }
 
+function showAnsi(){
+	currentAnsiFileChunk = currentAnsiFile.split("");
+	 while(currentAnsiFileChunk.length > 0) { 
+                  console.write(currentAnsiFileChunk.shift()); 
+                  if(console.inkey(K_UPPER, waitTime) == "Q"){ 
+                  	break; }
+                   }
 
-//console.print(grabAnsi(askForAnsiFromPack("blocktronics_wtf4")));
+}
+
+//console.print(grabAnsi(askForAnsiFromPack("blocktronics_wtf4")));  // a very simple way to ask for a file from a pack
 
 
 //4. http://sixteencolors.net/pack/01ninja/FZ-BLUE.ANS/download -- use file location parameter to get the download URL (dont use 'api' prefix)
@@ -286,7 +302,7 @@ function grabAnsi(fileLocation){
 	var ansiRoute = siteRoot + fileLocation;
 	ansiResponse = request.Get(ansiRoute);
 	var ansiBody = request.body;
-	currentAnsiFile = ansiBody;
+	currentAnsiFile =  ansiBody;
 	return ansiBody;
 
 }
