@@ -50,7 +50,7 @@ function showGlobalPrompt() {
 	} else {
 		packPromptStr = currentPack;
 	}
-	console.putmsg("\r\n\1h\1m16colors.net archive \1y*** \1cYear: \1w" + theYear + " \1cPack: \1w" + packPromptStr + "\r\n");
+	console.putmsg("\r\n\1h\1m16colors.net archive \1y**\1r" + waitTime + "000\1wbps\1y**: \1cYear: \1w" + theYear + " \1cPack: \1w" + packPromptStr + "\r\n");
 }
 // 1. //http://api.sixteencolors.net/v0/year  -- get list of years
 // Sample Data // {"packs":690,"year":1997}
