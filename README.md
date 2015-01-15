@@ -9,11 +9,11 @@ To install on Synchronet, it is the same as any other Javascript Executable.  In
 
 ...!!! * SCFG SETTINGS * !!!... (everything else default values are fine)<br><br>
 Name       :                Sixteen Colors Archive       <--- any name is fine<br>
-Internal Code      :        16COLORS                     <--- your own code<br>
+Internal Code      :        16COLORS                     <--- your own code is fine just needs to be unique<br>
 Start-up Directory    :     ../xtrn/16colors             <--- where the file is<br>
 Command Line          :     ?16colors.js                 <--- the filename preceded by a "?"<br>
 Multiple Concurrent Users : Yes                          <--- multiple users can use at once<br>
 <br><br>
 Since this took a day to complete, I basically completed what I consider core functionality - getting lists of files and viewing them.  I'm sure you can think of some improvements, and I also encourage you to try getting your feet wet if you can muster the courage.  Obviously, you are welcome to fork or improve or modify this code. I may improve it some, but I consider this a good start and suitable of release.  
 
- Feel free to shoot suggestions, donations or job offers (seriously), my way.  
+ Feel free to shoot suggestions, bug reports donations or job offers (seriously), my way.  
