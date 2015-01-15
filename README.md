@@ -1,4 +1,6 @@
 # 16colorsSynchronetAPIviewer
+THIS IS A WORKING FIRST VERSION - IF YOU INSTALL, PLEASE STAR OR FOLLOW THIS PROJECT FOR UPDATES.  PLANNED SECOND VERSION WILL LIKELY INCORPORATE COMMENTING AND UPVOTING THAT WILL BE INTERBBS-CAPABLE IN ORDER TO CREATE A NEW BROWSING MODE TO BETTER NAVIGATE THE ARCHIVE.
+
 This is a Door for Synchronet BBS software that displays ANSI files from the 16colors.net archive via their API.
 
 It will allow you to : <br>1) List the packs in a year <br>2) Select a Pack and List the Files and<br> 3) Select and View a File
