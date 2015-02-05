@@ -237,14 +237,18 @@ function getListFromPack(pack){
 	var parsedResponse = JSON.parse(rawPackList);
 	var ansiFiles = parsedResponse.files;
 	var filteredFiles = [];
-
+	filter = true;
 		for(i=0;i<ansiFiles.length;i++){
 			ansiFile = ansiFiles[i];
 			ansiFileExt = ansiFile.filename.substring(ansiFile.filename.length - 3,ansiFile.filename.length).toUpperCase();
-				if(ansiFileExt == "ASC" || ansiFileExt == "TXT" ||ansiFileExt == "ANS") {
-					filteredFiles.push(ansiFile);
+			if(filter){
+				if(ansiFileExt == "ASC" || ansiFileExt == "ANS" ||ansiFileExt == "TXT" ) {filteredFiles.push(ansiFile);
 				}
+			} else {
+				if(ansiFileExt != "EXE" && ansiFileExt != "COM" && ansiFileExt != "GIF" && ansiFileExt != "JPG"){ 
+					filteredFiles.push(ansiFile)}
 		}
+		}	
 	currentPackList = filteredFiles;
 	return filteredFiles;
 }
@@ -262,6 +266,7 @@ function displayPackList(pack){
 function askForAnsiFromPack(pack){
 	thePackList = getListFromPack(pack);
 	packListLength = thePackList.length - 1;
+	var i;
 	if(packListLength < 0){
 		console.putmsg("\1r\r\nNo valid files found in Pack, blame me or blame sixteen colors.\r\n\1c Returning to pack Selection");
 		selectAYear();
@@ -269,17 +274,28 @@ function askForAnsiFromPack(pack){
 	}
 	displayPackList(pack);  //for convenience  interface TBD
 	while(1){
-	choice = "";
-			showGlobalPrompt();
-			console.putmsg("Enter a number from 0 to " + packListLength + "\r\n or \1yC \1n- change Packs or \1yM\1n - Modem speeds or\1y D\1n -Display files or\1y X\1n to exit");
-			choice = console.getstr();
+		choice = "";
+		showGlobalPrompt();
+		console.putmsg("Enter a number from 0 to " + packListLength + "\r\n or \1yA \1n- ll at once \1yC \1n- change Packs or \1yM\1n - Modem speeds or\1y D\1n -Display files or\1y X\1n to exit");
+		choice = console.getstr();
 
 		if(choice.toUpperCase() == "C"){
 			selectAYear();
 			return;
-		}else if(choice.toUpperCase() == "D"){
-			displayPackList(pack); 
-		} else if(choice.toUpperCase() == "M"){
+			}else if (choice.toUpperCase() == "A"){
+				for(i=0;i<thePackList.length;i++){
+					ansiToGet = thePackList[i];
+					grabAnsi(ansiToGet.file_location);
+					showAnsi();
+					console.putmsg("\r\n\1h\1y\r\n" + ansiToGet.file_location + "\r\n\r\n\1n");	
+						if(console.inkey(K_UPPER, 500) == "Q"){ 
+		                  	break; 
+		                  }
+		                  //console.clear();
+	            }
+			}else if(choice.toUpperCase() == "D"){
+				displayPackList(pack); 
+			} else if(choice.toUpperCase() == "M"){
 			setModemSpeed(); 
 		} 
 		else if(choice.toUpperCase() == "X"){
