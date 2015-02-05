@@ -12,7 +12,7 @@ console.attributes = BG_BLACK|WHITE;
 var siteRoot = "http://sixteencolors.net";
 var apiRoot = "http://api.sixteencolors.net/v0";
 var itemsPerPage = 30;
-
+var filter = true;
 var theYear;
 var thePacks;
 var currentPack;
@@ -95,7 +95,6 @@ function selectAPack(){
 		}
 		currentPack = thePacks[choice].name;
 		askForAnsiFromPack(currentPack);
-
 	}
 
 function browsePacksInYear(aYear){
@@ -127,66 +126,70 @@ function pageNavPrompt(){
 		console.putmsg("\1g" + pageNavOptions[i].hotkey +"\1h\1y, " )
 	}
 	console.putmsg("\1h ?\1i\1r:\1n\r\nPage \1h\1y" + currentPage + "\1n of \1y" + numberOfPages);
-	var pagePromptSel = console.getkey();
-	switch(pagePromptSel.toUpperCase()){
-		case "S" :
-			selectAPack();
-			return;
-		case "N" :
-			if(currentPage + 1 <= numberOfPages){
-				currentPage++;
+	var pagePromptSel = console.getstr();
+	if(parseInt(pagePromptSel) < thePacks.length && parseInt(pagePromptSel) >= 0) {
+		selectAPack2(parseInt(pagePromptSel));
+	} else { switch(pagePromptSel.toUpperCase()){
+			case "S" :
+			currentPack = "";
+				browsePacksInYear(theYear);
+				return;
+			case "N" :
+				if(currentPage + 1 <= numberOfPages){
+					currentPage++;
+					checkPageListing();
+					displayPackPage();
+					return;
+				} else {
+						console.putmsg("\1rLast Page Reached!\r\n");
+						break;
+				}
+			case "P" :
+				if(currentPage - 1 > 0){
+					currentPage--;
+					checkPageListing();
+					displayPackPage();
+					return;
+				} else {
+					console.putmsg("\1rYou are on the first page!\r\n")
+						break;
+				}
+			case "J" :
+				choice2 = -1;
+				while(choice2 < 1 || choice2 > numberOfPages){
+					console.putmsg("\1h\1rSelect a Page number \1y--> ");
+					choice2 = console.getnum();
+				}
+				currentPage = parseInt(choice2);
 				checkPageListing();
 				displayPackPage();
-				return;
-			} else {
-					console.putmsg("\1rLast Page Reached!\r\n");
-					break;
-			}
-		case "P" :
-			if(currentPage - 1 > 0){
-				currentPage--;
-				checkPageListing();
-				displayPackPage();
-				return;
-			} else {
-				console.putmsg("\1rYou are on the first page!\r\n")
-					break;
-			}
-		case "J" :
-			choice2 = -1;
-			while(choice2 < 1 || choice2 > numberOfPages){
-				console.putmsg("\1h\1rSelect a Page number \1y--> ");
-				choice2 = console.getnum();
-			}
-			currentPage = parseInt(choice2);
-			checkPageListing();
-			displayPackPage();
-		return;
-		case "Y" :
-			selectAYear();
 			return;
-			case "?" :
-			console.putmsg("\r\n");
-			for(i=0;i<pageNavOptions.length;i++){
-				console.putmsg(pageNavOptions[i].hotkey + " --- " + pageNavOptions[i].description + "\r\n" )
-			}
-			break;
-		case "M" :
-			setModemSpeed();
-			break;
-		case "X" :
-			throw("quit");
+			case "Y" :
+				selectAYear();
+				return;
+				case "?" :
+				console.putmsg("\r\n");
+				for(i=0;i<pageNavOptions.length;i++){
+					console.putmsg(pageNavOptions[i].hotkey + " --- " + pageNavOptions[i].description + "\r\n" )
+				}
+				break;
+			case "M" :
+				setModemSpeed();
+				break;
+			case "X" :
+				throw("quit");
 			default :
-			console.putmsg("Enter a Valid Selection\r\n");
-			break;
+				console.putmsg("Enter a Valid Selection\r\n");
+				break;
+		}
 	}
+
+
 
 function checkPageListing(){
 		request2 = new HTTPRequest();
-		completeYearEndpoint = apiRoot + "/year/" + theYear + "?page=" + currentPage + "&rows=30";
-		
+		completeYearEndpoint = apiRoot + "/year/" + theYear + "?page=" + currentPage + "&rows=30";	
 		entireYearResponse = request2.Get(completeYearEndpoint);
-
 		thePacks = JSON.parse(request2.body);
 	}
 
@@ -228,7 +231,7 @@ function findPagesInYear(aYear){
 //{"fullsize":"/pack/01ninja/FZ-BLUE.ANS/fullscale","uri":"/pack/01ninja/FZ-BLUE.ANS","filename":"FZ-BLUE.ANS","pack":{"uri":"/pack/01ninja","name":"01ninja","filename":"01ninja.zip"},
 //"file_location":"/pack/01ninja/FZ-BLUE.ANS/download","thumbnail":"/pack/01ninja/FZ-BLUE.ANS/preview"},{
 
-function getListFromPack(pack){
+function getListFromPack(pack,filterOff){
 	var request = new HTTPRequest();
 	var packRoute = apiRoot + "/pack/" + pack;
 	var packResponse = request.Get(packRoute);
@@ -237,18 +240,16 @@ function getListFromPack(pack){
 	var parsedResponse = JSON.parse(rawPackList);
 	var ansiFiles = parsedResponse.files;
 	var filteredFiles = [];
-	filter = true;
 		for(i=0;i<ansiFiles.length;i++){
 			ansiFile = ansiFiles[i];
 			ansiFileExt = ansiFile.filename.substring(ansiFile.filename.length - 3,ansiFile.filename.length).toUpperCase();
-			if(filter){
-				if(ansiFileExt == "ASC" || ansiFileExt == "ANS" ||ansiFileExt == "TXT" ) {filteredFiles.push(ansiFile);
-				}
-			} else {
-				if(ansiFileExt != "EXE" && ansiFileExt != "COM" && ansiFileExt != "GIF" && ansiFileExt != "JPG"){ 
-					filteredFiles.push(ansiFile)}
+			if(filterOff == true){if(ansiFileExt != "EXE" && ansiFileExt != "COM" && ansiFileExt != "GIF" && ansiFileExt != "JPG"){ filteredFiles.push(ansiFile)}
+				} else {
+					if(ansiFileExt == "ASC" || ansiFileExt == "ANS" ||ansiFileExt == "TXT" ) {filteredFiles.push(ansiFile); }
+				}			
 		}
-		}	
+
+
 	currentPackList = filteredFiles;
 	return filteredFiles;
 }
@@ -257,6 +258,7 @@ function displayPackList(pack){
 	console.clear();
 	console.putmsg("\1h\1r" + pack + "\r\n");
 	packList = currentPackList;
+
 		for(i=0;i<packList.length;i++){
 			var ansiFile = packList[i];
 			console.putmsg("\1y\1h " +i +" \1n\1m*\1c --\1m *\1w\1h " + ansiFile.filename + "\r\n");
@@ -266,21 +268,32 @@ function displayPackList(pack){
 function askForAnsiFromPack(pack){
 	thePackList = getListFromPack(pack);
 	packListLength = thePackList.length - 1;
-	var i;
 	if(packListLength < 0){
-		console.putmsg("\1r\r\nNo valid files found in Pack, blame me or blame sixteen colors.\r\n\1c Returning to pack Selection");
-		selectAYear();
-		return;
+		console.putmsg("\1r\r\nNo valid files found in Pack, blame me or blame sixteen colors.\r\n\1c Enter \1h\1yY\1n if you want to see an unfiltered version with more files\r\nSometimes ansi groups use different file extensions, however, there may be some unviewable files.");
+		if(console.getkey(K_UPPER) ==  "Y"){
+			thePackList = getListFromPack(currentPack,true);
+			packListLength = thePackList.length - 1;
+			//displayPackList(): 
+		} else {
+			selectAYear();
+			return;
+		}
 	}
+	
+	var i;
+
+
 	displayPackList(pack);  //for convenience  interface TBD
+
 	while(1){
 		choice = "";
 		showGlobalPrompt();
-		console.putmsg("Enter a number from 0 to " + packListLength + "\r\n or \1yA \1n- ll at once \1yC \1n- change Packs or \1yM\1n - Modem speeds or\1y D\1n -Display files or\1y X\1n to exit");
+		console.putmsg("Enter a number from 0 to " + thePackList.length - 1 + "\r\n or \1yA \1n- ll at once \1yC \1n- change Packs or \1yM\1n - Modem speeds or\1y D\1n -Display files or\1y X\1n to exit");
 		choice = console.getstr();
 
 		if(choice.toUpperCase() == "C"){
-			selectAYear();
+			currentPack = "";
+			browsePacksInYear(theYear);
 			return;
 			}else if (choice.toUpperCase() == "A"){
 				console.putmsg("Enter \1h\1yY\1n to clear & pause between AnSIs");
@@ -289,12 +302,13 @@ function askForAnsiFromPack(pack){
 					if(clearScreen == "Y"){console.clear();}
 						
 					ansiToGet = thePackList[i];
-					console.putmsg("\r\n\1h\1y\r\n" + ansiToGet.file_location + "\r\n\r\n\1n");	
+					console.putmsg("\r\n\1h\1g\r\n UPCOMING \1r *** \1y" + ansiToGet.file_location + " \1yOr***\1g BELOW\r\n\r\n\1n");	
 					grabAnsi(ansiToGet.file_location);
 					if(console.inkey(K_UPPER, 500) == "Q"){ 
 		                  	break; 
 		                  }
 					showAnsi();
+					console.putmsg("\r\n\1h\1c\r\n THAT WAS \1m *** \1w" + ansiToGet.file_location + " \1m***\1c ABOVE\r\n\r\n\1n");
 					
 					
 		                  //console.clear();
@@ -354,3 +368,14 @@ function grabAnsi(fileLocation){
 	return ansiBody;
 
 }
+
+
+
+//The Other SelectApack function somewhat copied to be more menuOptions
+
+function selectAPack2(packNum){
+		console.putmsg("\r\n\1rSelect a Pack Number.  ");
+		choice = packNum;
+		currentPack = thePacks[choice].name;
+		askForAnsiFromPack(currentPack);
+	}
