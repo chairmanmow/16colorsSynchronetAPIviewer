@@ -284,13 +284,17 @@ function askForAnsiFromPack(pack){
 			return;
 			}else if (choice.toUpperCase() == "A"){
 				for(i=0;i<thePackList.length;i++){
+					console.clear();
+						
 					ansiToGet = thePackList[i];
-					grabAnsi(ansiToGet.file_location);
-					showAnsi();
 					console.putmsg("\r\n\1h\1y\r\n" + ansiToGet.file_location + "\r\n\r\n\1n");	
-						if(console.inkey(K_UPPER, 500) == "Q"){ 
+					grabAnsi(ansiToGet.file_location);
+					if(console.inkey(K_UPPER, 500) == "Q"){ 
 		                  	break; 
 		                  }
+					showAnsi();
+					
+					
 		                  //console.clear();
 	            }
 			}else if(choice.toUpperCase() == "D"){
