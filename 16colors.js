@@ -283,8 +283,10 @@ function askForAnsiFromPack(pack){
 			selectAYear();
 			return;
 			}else if (choice.toUpperCase() == "A"){
+				console.putmsg("Enter \1h\1yY\1n to clear & pause between AnSIs");
+				var clearScreen = console.getkey().toUpperCase();
 				for(i=0;i<thePackList.length;i++){
-					console.clear();
+					if(clearScreen == "Y"){console.clear();}
 						
 					ansiToGet = thePackList[i];
 					console.putmsg("\r\n\1h\1y\r\n" + ansiToGet.file_location + "\r\n\r\n\1n");	
