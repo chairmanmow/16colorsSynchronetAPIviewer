@@ -18,4 +18,8 @@ Multiple Concurrent Users : Yes                          <--- multiple users can
 <br><br>
 Since this took a day to complete, I basically completed what I consider core functionality - getting lists of files and viewing them.  I'm sure you can think of some improvements, and I also encourage you to try getting your feet wet if you can muster the courage.  Obviously, you are welcome to fork or improve or modify this code. I may improve it some, but I consider this a good start and suitable of release.  
 
+<br><br>
+I added some new features.  Nothing too fancy but there's like a slide show option where all the ANSI's in a pack roll by for you to zone out off of, and you can throttle ansi's to show at simulated modem speeds.
+
+
  Feel free to shoot suggestions, bug reports or money my way should you want something.
