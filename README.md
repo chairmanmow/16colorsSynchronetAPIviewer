@@ -18,4 +18,4 @@ Multiple Concurrent Users : Yes                          <--- multiple users can
 <br><br>
 Since this took a day to complete, I basically completed what I consider core functionality - getting lists of files and viewing them.  I'm sure you can think of some improvements, and I also encourage you to try getting your feet wet if you can muster the courage.  Obviously, you are welcome to fork or improve or modify this code. I may improve it some, but I consider this a good start and suitable of release.  
 
- Feel free to shoot suggestions, bug reports donations or job offers (seriously), my way.  
+ Feel free to shoot suggestions, bug reports or money my way should you want something.
