@@ -1,3 +1,6 @@
+# I have no idea if this still works against the current 16colors api
+Last I tried to use this 16colors was down for a long time and I think they changed it around.  It was also really bad at handling the error for when the site was down.  If anyone wants me to look at this again, let me know, but for now I'd expect it not to work without some modification (2019)
+
 # 16colorsSynchronetAPIviewer
 THIS IS A WORKING FIRST VERSION - IF YOU INSTALL, PLEASE STAR, FOLLOW OR KEEP AN EYE ON THIS PROJECT FOR UPDATES.  PLANNED SECOND VERSION WILL LIKELY INCORPORATE COMMENTING AND UPVOTING THAT WILL BE INTERBBS-CAPABLE IN ORDER TO CREATE A NEW BROWSING MODE TO BETTER NAVIGATE THE ARCHIVE.
 
